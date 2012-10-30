@@ -3,7 +3,9 @@ package eu.uniek.wwy.walkwithyouonderzoek;
 import java.io.File;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Criteria;
@@ -11,7 +13,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -96,6 +100,7 @@ public class WalkWithYouOnderzoek extends Activity {
 					if(gpsLocationListener != null) {
 						dataWrapper.getPointsOfInterest().add(gpsLocationListener.getCurrentLocation());
 						dao.saveData(dataWrapper, getFile());
+						ToastUtil.showToast(v.getContext(), "Het herkenningspunt is toegevoed");
 					}
 				} catch (Exception e) {
 					ToastUtil.showToast(v.getContext(), e.getMessage());
@@ -105,7 +110,7 @@ public class WalkWithYouOnderzoek extends Activity {
 	}
 
 	private void checkEmailIsSet() {
-		SharedPreferences settings = getSharedPreferences(AskEmail.PREFS_NAME, 0);
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		String email = settings.getString("email", null);
 		if(email == null || email.equals("")) {
 			Intent i = new Intent(this, AskEmail.class);
@@ -115,7 +120,7 @@ public class WalkWithYouOnderzoek extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+		getMenuInflater().inflate(R.menu.activity_walk_with_you_onderzoek, menu);
 		return true;
 	}
 
@@ -148,6 +153,35 @@ public class WalkWithYouOnderzoek extends Activity {
 		File root = getExternalFilesDir(null);
 		File wwydaba = new File(root + "/wwydaba.obj");
 		return "" + wwydaba;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) { 
+		switch (item.getItemId()) {
+		case R.id.verwijderGegegevensMenuItem:
+				new AlertDialog.Builder(this)
+		        .setIcon(android.R.drawable.ic_dialog_alert)
+		        .setTitle("Verwijderen van Gegevens")
+		        .setMessage("Waarom zou je je gevens willen verwijderen?")
+		        .setPositiveButton("Doe toch maar!", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						try {
+							dao.saveData(new DataWrapper(), getFile());
+						} catch (Exception e) {
+							ToastUtil.showToast(context, e.getMessage());
+						}
+					}
+		        })
+		        .setNegativeButton("Nee alsjeblieft niet doen..", null)
+		        .show();
+		        return true;
+		case R.id.veranderEmail:
+				Intent i = new Intent(this, AskEmail.class);
+				startActivity(i);
+			return true;
+		default:
+			return false;
+		}
 	}
 
 }

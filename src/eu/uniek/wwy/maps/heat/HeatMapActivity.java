@@ -15,7 +15,7 @@ import com.google.android.maps.Projection;
 import eu.uniek.wwy.R;
 import eu.uniek.wwy.database.BreadcrumbsDAO;
 import eu.uniek.wwy.database.DataWrapper;
-import eu.uniek.wwy.maps.KMZExport;
+import eu.uniek.wwy.maps.KMlExport;
 import eu.uniek.wwy.utils.ToastUtil;
 
 public class HeatMapActivity extends MapActivity {
@@ -57,10 +57,10 @@ public class HeatMapActivity extends MapActivity {
 	public boolean onOptionsItemSelected(MenuItem item) { 
 		switch (item.getItemId()) {
 		case R.id.exportToKMZ:
-			KMZExport kmzExporter = new KMZExport();
+			KMlExport kmzExporter = new KMlExport();
 			String result = null;
 			try {
-				result = kmzExporter.exportToKMZ(this, dataWrapper);
+				result = kmzExporter.exportToKMl(this, dataWrapper);
 			} catch (IOException e) {
 				ToastUtil.showToast(getApplicationContext(), e.getMessage());
 			}

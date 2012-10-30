@@ -5,7 +5,7 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="AanUitKnopText">Aan</string>
-    <string name="text">Thankyou for participating in our research. To start press aan. The application will run in the background after. Note that gps need to be on </string>
+    <string name="text">Om te beginnen druk op &quot;uit&quot;. Er moet GPS of Internet zijn. Als uw wilt stoppen met gegevens verzamelen drukt uw weer op de knop. </string>
     <string name="title_activity_walk_with_you_onderzoek">WWYLineOnderzoek</string>
     <string name="title_activity_ask_email">AskEmail</string>
     <string name="emailtext">Vul het email adres in waar de data heen geexporteerd zal worden</string>
