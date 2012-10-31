@@ -165,11 +165,7 @@ public class WalkWithYouOnderzoek extends Activity {
 		        .setMessage("Waarom zou je je gevens willen verwijderen?")
 		        .setPositiveButton("Doe toch maar!", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
-						try {
-							dao.saveData(new DataWrapper(), getFile());
-						} catch (Exception e) {
-							ToastUtil.showToast(context, e.getMessage());
-						}
+						
 					}
 		        })
 		        .setNegativeButton("Nee alsjeblieft niet doen..", null)

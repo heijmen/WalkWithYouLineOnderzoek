@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import eu.uniek.wwy.R;
 
@@ -22,7 +23,7 @@ public class AskEmail extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ask_email);
-		final TextView field = (TextView) findViewById(R.id.textView1);
+		final EditText field = (EditText) findViewById(R.id.emailAdressTextField);
 		Button button = (Button) findViewById(R.id.button1);
 		button.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
