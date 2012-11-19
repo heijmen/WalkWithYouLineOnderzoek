@@ -9,12 +9,13 @@ import org.jdom2.Namespace;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import eu.uniek.wwy.database.DataWrapper;
-import eu.uniek.wwy.location.GPSLocation;
+import com.wwy.database.HerkenningPunt;
+
+import eu.uniek.wwy.database.OnderzoekDatabase;
 
 public class XMLExport {
 
-	public String getXMLString(DataWrapper wrapper) {
+	public String getXMLString(OnderzoekDatabase onderzoekDatabase) {
 		Document document = new Document();
 		Element rootElement = new Element("kml");
 		rootElement.setNamespace(Namespace.getNamespace("http://www.opengis.net/kml/2.2"));
@@ -26,7 +27,7 @@ public class XMLExport {
 		documentElement.addContent(createElementWithContent("description", "Hieronder staat wat de testpersoon allemaal heeft gedaan"));
 
 		Element folderElement = new Element("Folder");
-		for(Element element : createLandmarksElement(wrapper.getPointsOfInterest())) {
+		for(Element element : createLandmarksElement(onderzoekDatabase.getHerkenningPunten())) {
 			folderElement.addContent(element);
 		}
 		documentElement.addContent(folderElement);
@@ -40,9 +41,9 @@ public class XMLExport {
 
 		Element lineStringElement = new Element("LineString");
 		placeMarkElement.addContent(lineStringElement);
-		lineStringElement.addContent(createElementWithContent("tesselate", "1"));
+		lineStringElement.addContent(createElementWithContent("route", "1"));
 
-		lineStringElement.addContent(createCoordinatesElement(wrapper.getBreadcrumbs()));
+		lineStringElement.addContent(createCoordinatesElement(onderzoekDatabase));
 
 		XMLOutputter outputter = new XMLOutputter();
 		outputter.setFormat(Format.getPrettyFormat());
@@ -55,31 +56,31 @@ public class XMLExport {
 		return elem;
 	}
 
-	private Element createCoordinatesElement(List<GPSLocation> locations) {
+	private Element createCoordinatesElement(OnderzoekDatabase onderzoekDatabase) {
 		Element coordinatesElement = new Element("coordinates");
 		StringBuilder stringBuilder = new StringBuilder();
-		for(GPSLocation gpsLocation : locations) {
-			stringBuilder.append(gpsLocation.getLongitude());
+		for(int index = 1; index < onderzoekDatabase.getBreadcrumbsRowCount(); index++) {
+			stringBuilder.append(onderzoekDatabase.getBreadCrumb(index).getLongitudeE6() / 1e6);
 			stringBuilder.append(",");
-			stringBuilder.append(gpsLocation.getLatitude());
+			stringBuilder.append(onderzoekDatabase.getBreadCrumb(index).getLatitudeE6() / 1e6);
 			stringBuilder.append("\r\n");
 		}
 		coordinatesElement.setText(stringBuilder.toString());
 		return coordinatesElement;
 	}
 
-	private List<Element> createLandmarksElement(List<GPSLocation> locations) {
+	private List<Element> createLandmarksElement(List<HerkenningPunt> locations) {
 		List<Element> elements = new ArrayList<Element>();
 		int i = 0;
-		for(GPSLocation location : locations) {
+		for(HerkenningPunt location : locations) {
 			i++;
 			if(location != null) {
 				Element placeMarkElement = new Element("Placemark");
 				placeMarkElement.addContent(createElementWithContent("name", "landmark" + i));
-				placeMarkElement.addContent(createElementWithContent("description", "landmark" + i));
+				placeMarkElement.addContent(createElementWithContent("description", location.getmComment()));
 				Element Point = new Element("Point");
 				placeMarkElement.addContent(Point);
-				Point.addContent(createElementWithContent("coordinates", location.getLongitude() + "," + location.getLatitude()));
+				Point.addContent(createElementWithContent("coordinates", (double) location.getLongitudeE6() / 1e6 + "," + (double) location.getLatitudeE6() / 1e6));
 				elements.add(placeMarkElement);
 			}
 		}

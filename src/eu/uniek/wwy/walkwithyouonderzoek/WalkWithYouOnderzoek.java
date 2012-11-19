@@ -21,11 +21,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.ToggleButton;
+
+import com.wwy.database.HerkenningPunt;
+import com.wwy.gps.GPSLocationListener;
+
 import eu.uniek.wwy.R;
-import eu.uniek.wwy.database.BreadcrumbsDAO;
-import eu.uniek.wwy.database.DataWrapper;
-import eu.uniek.wwy.location.GPSLocationListener;
+import eu.uniek.wwy.database.OnderzoekDatabase;
 import eu.uniek.wwy.maps.heat.HeatMapActivity;
 import eu.uniek.wwy.utils.ToastUtil;
 
@@ -35,42 +38,23 @@ public class WalkWithYouOnderzoek extends Activity {
 	private Runnable updateRunnable;
 	private LocationManager locationManager;
 	private GPSLocationListener gpsLocationListener = new GPSLocationListener();
-	private BreadcrumbsDAO dao = new BreadcrumbsDAO();
 	private Context context = this;
-	private DataWrapper dataWrapper = new DataWrapper();
+	private OnderzoekDatabase onderzoekDatabase;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_walk_with_you_onderzoek);
-		if(!sdWritable()) {
-			ToastUtil.showToast(this, "sdcard is not writable");
-		}
+		onderzoekDatabase = new OnderzoekDatabase(this);
 		checkEmailIsSet();
-
-		try {
-			File file = new File(getFile());
-			if(file.exists()) {
-				dataWrapper = dao.getData(getFile());
-			} else {
-				dataWrapper = new DataWrapper();
-			}
-		} catch (Exception e) {
-			ToastUtil.showToast(context, e.getMessage());
-		}
 		ToggleButton button = (ToggleButton) findViewById(R.id.AanUitKnop);
 		updateHandler = new Handler();
 		updateRunnable = new Runnable () {
 			public void run() {
 				if(gpsLocationListener.getCurrentLocation() != null) {
-					try {
-						dataWrapper.getBreadcrumbs().add(gpsLocationListener.getCurrentLocation());
-						dao.saveData(dataWrapper, getFile());
-					} catch (Exception e) {
-						ToastUtil.showToast(context, e.getMessage());
-					}
+					onderzoekDatabase.addBreadCrumb(gpsLocationListener.getCurrentLocation());
 				}
-				updateHandler.postDelayed(this, 500);
+				updateHandler.postDelayed(this, 3000);
 			}
 		};
 		button.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -97,10 +81,35 @@ public class WalkWithYouOnderzoek extends Activity {
 		herkingButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try {
-					if(gpsLocationListener != null) {
-						dataWrapper.getPointsOfInterest().add(gpsLocationListener.getCurrentLocation());
-						dao.saveData(dataWrapper, getFile());
-						ToastUtil.showToast(v.getContext(), "Het herkenningspunt is toegevoed");
+					if(gpsLocationListener != null && gpsLocationListener.getCurrentLocation() != null) {
+						AlertDialog.Builder alert = new AlertDialog.Builder(context);
+
+						alert.setTitle("Herkennings punt toevoegen");
+						alert.setMessage("We zouden graag willen weten waarom u dit punt nou toevoegt als herkenningspunt, dit kunt u overslaan.");
+
+						// Set an EditText view to get user input 
+						final EditText input = new EditText(context);
+						alert.setView(input);
+
+						alert.setPositiveButton("Oke!", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+						  String value = input.getText().toString();
+						  	HerkenningPunt herkenningsPunt = new HerkenningPunt(gpsLocationListener.getCurrentLocation(), value);
+						  	onderzoekDatabase.addHerkenningPunt(herkenningsPunt);
+						  }
+						});
+
+						alert.setNegativeButton("Overslaan!", new DialogInterface.OnClickListener() {
+						  public void onClick(DialogInterface dialog, int whichButton) {
+							  HerkenningPunt herkenningsPunt = new HerkenningPunt(gpsLocationListener.getCurrentLocation(), "Gebruiker drukte op overslaan!");
+							  	onderzoekDatabase.addHerkenningPunt(herkenningsPunt);
+						  }
+						});
+
+						alert.show();
+//						dataWrapper.getPointsOfInterest().add(gpsLocationListener.getCurrentLocation());
+//						dao.saveData(dataWrapper, getFile());
+//						ToastUtil.showToast(v.getContext(), "Het herkenningspunt is toegevoed");
 					}
 				} catch (Exception e) {
 					ToastUtil.showToast(v.getContext(), e.getMessage());
@@ -137,43 +146,28 @@ public class WalkWithYouOnderzoek extends Activity {
 		ToastUtil.showToast(this, provider);
 		locationManager.requestLocationUpdates(provider, 500, 1, gpsLocationListener);
 	}
-	private boolean sdWritable() {
-		boolean mExternalStorageWriteable = false;
-		String state = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(state)) {
-			mExternalStorageWriteable = true;
-		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			mExternalStorageWriteable = false;
-		} else {
-			mExternalStorageWriteable = false;
-		}
-		return mExternalStorageWriteable;
-	}
-	public String getFile() {
-		File root = getExternalFilesDir(null);
-		File wwydaba = new File(root + "/wwydaba.obj");
-		return "" + wwydaba;
-	}
 	
+
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) { 
 		switch (item.getItemId()) {
 		case R.id.verwijderGegegevensMenuItem:
-				new AlertDialog.Builder(this)
-		        .setIcon(android.R.drawable.ic_dialog_alert)
-		        .setTitle("Verwijderen van Gegevens")
-		        .setMessage("Waarom zou je je gevens willen verwijderen?")
-		        .setPositiveButton("Doe toch maar!", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface arg0, int arg1) {
-						
-					}
-		        })
-		        .setNegativeButton("Nee alsjeblieft niet doen..", null)
-		        .show();
-		        return true;
+			new AlertDialog.Builder(this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle("Verwijderen van Gegevens")
+			.setMessage("Waarom zou je je gevens willen verwijderen?")
+			.setPositiveButton("Doe toch maar!", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface arg0, int arg1) {
+					onderzoekDatabase.deleteCrumbs();
+				}
+			})
+			.setNegativeButton("Nee alsjeblieft niet doen..", null)
+			.show();
+			return true;
 		case R.id.veranderEmail:
-				Intent i = new Intent(this, AskEmail.class);
-				startActivity(i);
+			Intent i = new Intent(this, AskEmail.class);
+			startActivity(i);
 			return true;
 		default:
 			return false;

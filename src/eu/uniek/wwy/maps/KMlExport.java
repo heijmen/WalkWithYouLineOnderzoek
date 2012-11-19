@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
-import eu.uniek.wwy.database.DataWrapper;
+import eu.uniek.wwy.database.OnderzoekDatabase;
 import eu.uniek.wwy.export.XMLExport;
 import eu.uniek.wwy.maps.heat.HeatMapActivity;
 
@@ -18,11 +18,11 @@ public class KMlExport {
 	
 	private String filePath;
 
-	public String exportToKMl(HeatMapActivity heatMapActivity, DataWrapper wrapper) throws IOException {
+	public String exportToKMl(HeatMapActivity heatMapActivity, OnderzoekDatabase onderzoekDatabase) throws IOException {
 		File file = new File(Environment.getExternalStorageDirectory().getPath()+"/wwy");
 		file.mkdir();
 		filePath = Environment.getExternalStorageDirectory().getPath()+"/wwy/heatmap.kml";
-		String toExport = new XMLExport().getXMLString(wrapper);
+		String toExport = new XMLExport().getXMLString(onderzoekDatabase);
 		FileOutputStream fileOutputStream = new FileOutputStream(filePath);
 		fileOutputStream.write(toExport.getBytes());
 		fileOutputStream.close();

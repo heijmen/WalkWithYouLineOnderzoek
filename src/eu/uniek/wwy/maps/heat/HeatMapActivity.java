@@ -1,6 +1,5 @@
 package eu.uniek.wwy.maps.heat;
 
-import java.io.File;
 import java.io.IOException;
 
 import android.os.Bundle;
@@ -13,37 +12,26 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Projection;
 
 import eu.uniek.wwy.R;
-import eu.uniek.wwy.database.BreadcrumbsDAO;
-import eu.uniek.wwy.database.DataWrapper;
+import eu.uniek.wwy.database.OnderzoekDatabase;
 import eu.uniek.wwy.maps.KMlExport;
 import eu.uniek.wwy.utils.ToastUtil;
 
 public class HeatMapActivity extends MapActivity {
 	private HeatMap overlay;
-	private DataWrapper dataWrapper = new DataWrapper();
-	private BreadcrumbsDAO dao = new BreadcrumbsDAO();
 	private Projection projection;
 	private MapView mapView;
+	private OnderzoekDatabase onderzoekDatabase;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setContentView(R.layout.activity_heat_map); 
-		try {
-			File file = new File(getFile());
-			if(file.exists()) {
-				dataWrapper = dao.getData(getFile());
-			} else {
-				dataWrapper = new DataWrapper();
-			}
-		} catch (Exception e) {
-			ToastUtil.showToast(this, e.getMessage());
-		}
+		setContentView(R.layout.activity_heat_map);
+		onderzoekDatabase = new OnderzoekDatabase(this);
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
 		
 		projection = mapView.getProjection();
-		this.overlay = new HeatMap(dataWrapper.getBreadcrumbs(), dataWrapper.getPointsOfInterest(), projection);
+		this.overlay = new HeatMap(onderzoekDatabase, projection);
 		mapView.getOverlays().add(overlay);
 	}
 
@@ -60,7 +48,7 @@ public class HeatMapActivity extends MapActivity {
 			KMlExport kmzExporter = new KMlExport();
 			String result = null;
 			try {
-				result = kmzExporter.exportToKMl(this, dataWrapper);
+				result = kmzExporter.exportToKMl(this, onderzoekDatabase);
 			} catch (IOException e) {
 				ToastUtil.showToast(getApplicationContext(), e.getMessage());
 			}
@@ -77,11 +65,6 @@ public class HeatMapActivity extends MapActivity {
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
-	}
-	public String getFile() {
-		File root = getExternalFilesDir(null);
-		File wwydaba = new File(root + "/wwydaba.obj");
-		return "" + wwydaba;
 	}
 
 }

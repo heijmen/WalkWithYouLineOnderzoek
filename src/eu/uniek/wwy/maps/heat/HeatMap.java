@@ -14,20 +14,20 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
+import com.wwy.database.DatabaseHandler;
 
-import eu.uniek.wwy.location.GPSLocation;
+import eu.uniek.wwy.database.OnderzoekDatabase;
+
 
 public class HeatMap extends Overlay {
 
-	private List<GPSLocation> locations;
-	private List<GPSLocation> landmarks;
 	private Projection projection;
+	private OnderzoekDatabase mOnderzoekDatabase;
 	private boolean _mustDraw = true; 
 
-	public HeatMap(List<GPSLocation> locations, List<GPSLocation> landmarks, Projection projection) {
-		this.locations = locations;
+	public HeatMap(OnderzoekDatabase onderzoekDatabase, Projection projection) {
+		this.mOnderzoekDatabase = onderzoekDatabase;
 		this.projection = projection;
-		this.landmarks = landmarks;
 	}
 	public void draw(Canvas canvas, MapView mapv, boolean shadow){
 		super.draw(canvas, mapv, shadow);
@@ -40,20 +40,17 @@ public class HeatMap extends Overlay {
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
 		mPaint.setStrokeWidth(2);
-
-		for(int index = 0; index < locations.size(); index++) {
-			if(index != locations.size() -1) {
-				GeoPoint oldLocation = new GeoPoint((int)(locations.get(index).getLatitude() * 1e6), (int)(locations.get(index).getLongitude() * 1e6));
-				GeoPoint newLocation = new GeoPoint((int)(locations.get(index + 1).getLatitude() * 1e6), (int)(locations.get(index + 1).getLongitude() * 1e6));
-				createLine(oldLocation, newLocation, canvas, mPaint);
-			} else {
-				break;
-			}
+		
+		for(int index = 1; index < (mOnderzoekDatabase.getBreadcrumbsRowCount() -1); index++) {
+				GeoPoint oldLocation = mOnderzoekDatabase.getBreadCrumb(index);
+				GeoPoint newLocation = mOnderzoekDatabase.getBreadCrumb(index + 1);
+				if(oldLocation != null && newLocation != null) {
+					createLine(oldLocation, newLocation, canvas, mPaint);
+				}
 		}
-		for(GPSLocation landmark : landmarks) {
+		for(GeoPoint landmark : mOnderzoekDatabase.getHerkenningPunten()) {
 			if(landmark != null) {
-				GeoPoint landmarkGeoPoint = new GeoPoint((int)(landmark.getLatitude() * 1e6), (int)(landmark.getLongitude() * 1e6));
-				createLandmark(landmarkGeoPoint, canvas, mPaint);
+				createLandmark(landmark, canvas, mPaint);
 			}
 		}
 	}
@@ -70,6 +67,7 @@ public class HeatMap extends Overlay {
 		path.lineTo(p1.x,p1.y);
 		canvas.drawPath(path, mPaint);
 	}
+	
 	private void createLandmark(GeoPoint point, Canvas canvas, Paint mPaint) {
 		Point p1 = new Point();
 		Path path = new Path();
@@ -77,6 +75,7 @@ public class HeatMap extends Overlay {
 		path.addCircle(p1.x, p1.y, 20, Direction.CCW);
 		canvas.drawPath(path, mPaint);
 	}
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent e, MapView mapView) {
 		if (MotionEvent.ACTION_DOWN == e.getAction())
