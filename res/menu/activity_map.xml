@@ -4,4 +4,5 @@
           android:icon="@android:drawable/ic_menu_directions"
           android:title="@string/exportToKMZ"/>
     <item android:id="@+id/Sattelite" android:title="SatteliteView" android:icon="@android:drawable/ic_menu_mapmode"></item>
+   
 </menu>

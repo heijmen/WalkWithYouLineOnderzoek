@@ -4,14 +4,16 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="AanUitKnopText">Aan</string>
-    <string name="text">Om te beginnen druk op &quot;uit&quot;. Er moet GPS of Internet zijn. Als uw wilt stoppen met gegevens verzamelen drukt uw weer op de knop. </string>
+    <string name="AanUitKnopText">App inschakelen</string>
+    <string name="text">Om te beginnen drukt u op &quot;App inschakelen&quot;. U moet verbinding met internet en GPS hebben om de app te kunnen gebruiken. Als u de app weer wilt gebruiken drukt u op &quot;App uitschakelen&quot;.  </string>
     <string name="title_activity_walk_with_you_onderzoek">WWYLineOnderzoek</string>
     <string name="title_activity_ask_email">AskEmail</string>
     <string name="emailtext">Vul het email adres in waar de data heen geexporteerd zal worden</string>
     <string name="Ok">OK</string>
     <string name="POIText">Herkenningspunt</string>
-	<string name="goToMap">Open map</string>
+	<string name="goToMap">Export Map</string>
 	<string name="exportToKMZ">Exporteer naar KMZ</string>
 	<string name="ChangeEmailMenuItem">Verander Email</string>
+	<string name="opties">Opties</string>
+	<string name="hey">Onderzoeksapp WWY</string>
 </resources>

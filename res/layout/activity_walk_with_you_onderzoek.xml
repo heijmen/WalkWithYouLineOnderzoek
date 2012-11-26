@@ -1,43 +1,80 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/soortvangrey"
+    android:orientation="vertical" >
+
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="40dp"
-      	android:textStyle="bold" 
-        android:text="@string/text" />
-
-    <ToggleButton
-        android:id="@+id/AanUitKnop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:text="@string/AanUitKnopText" />
-
-    <Button
-        android:id="@+id/herkenningspunt_button"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/AanUitKnop"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="144dp"
-        android:text="@string/POIText"
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:background="@color/gayblue"
+        android:gravity="center"
+        android:text="@string/hey"
+        android:textColor="@color/white"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/AanUitKnop"
-        android:layout_below="@+id/herkenningspunt_button"
-        android:layout_marginTop="32dp"
-        android:text="@string/goToMap" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="@string/opties"
+        android:textStyle="bold" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/text"
+            android:textColor="@android:color/background_light"
+            android:textSize="12dp" />
+
+        <Button
+            android:id="@+id/AanUitKnop"
+            style="@style/redcrosss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/redgradient"
+            android:text="@string/AanUitKnopText"
+            android:textColor="@android:color/background_light"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/herkenningspunt_button"
+            style="@style/heijmen2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/fuckinggraydrawables"
+            android:text="@string/POIText"
+            android:textColor="@android:color/background_light"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/map"
+            style="@style/heijmen3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/fuckinggraydrawables"
+            android:text="@string/goToMap"
+            android:textColor="@android:color/background_light"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>
