@@ -9,8 +9,7 @@ import org.jdom2.Namespace;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import com.wwy.database.HerkenningPunt;
-
+import eu.uniek.wwy.database.HerkenningPunt;
 import eu.uniek.wwy.database.OnderzoekDatabase;
 
 public class XMLExport {

@@ -8,9 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -23,14 +20,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.wwy.database.HerkenningPunt;
-import com.wwy.gps.GPSLocationListener;
-
 import eu.uniek.wwy.R;
+import eu.uniek.wwy.database.HerkenningPunt;
 import eu.uniek.wwy.database.OnderzoekDatabase;
 import eu.uniek.wwy.maps.KMlExport;
-import eu.uniek.wwy.maps.heat.HeatMapActivity;
 import eu.uniek.wwy.utils.ToastUtil;
 
 public class WalkWithYouOnderzoek extends Activity {
