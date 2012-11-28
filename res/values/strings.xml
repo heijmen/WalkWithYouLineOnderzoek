@@ -5,10 +5,13 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="AanUitKnopText">App inschakelen</string>
-    <string name="text">Om te beginnen drukt u op &quot;App inschakelen&quot;. U moet verbinding met internet en GPS hebben om de app te kunnen gebruiken. Als u de app weer wilt gebruiken drukt u op &quot;App uitschakelen&quot;.  </string>
+    <string name="text">Verbinding met internet of GPS is vereist.
+        \n Druk op \&quot;App inschakelen\&quot; om te beginnen.
+        \n Druk op \&quot;App uitschakelen\&quot; om te stoppen.  
+    </string>
     <string name="title_activity_walk_with_you_onderzoek">WWYLineOnderzoek</string>
     <string name="title_activity_ask_email">AskEmail</string>
-    <string name="emailtext">Vul het email adres in waar de data heen geexporteerd zal worden</string>
+    <string name="emailtext">Vul het e-mailadres in waar de data heen geexporteerd zal worden</string>
     <string name="Ok">OK</string>
     <string name="POIText">Herkenningspunt</string>
 	<string name="goToMap">Export Map</string>
@@ -16,4 +19,15 @@
 	<string name="ChangeEmailMenuItem">Verander Email</string>
 	<string name="opties">Opties</string>
 	<string name="hey">Onderzoeksapp WWY</string>
+	<string name="Herkenningspunt_naam_message">Geeft dit herkenningspunt een naam.</string>
+	<string name="Herkenningspunt_naam_title">Herkenningspunt toevoegen</string>
+	<string name="button_oke">Oke</string>
+	<string name="button_overslaan">Overslaan</string>
+	<string name="Email_text_title">E-mail om de gegevens naar te exporteren</string>
+	<string name="Email_text_message">De verzamelde gegevens worden opgestuurt naar een e-mailadres, vul deze hier in. u kunt dit later nog veranderen in het menu</string>
+	<string name="Verwijderen_title">Verwijder gegevens</string>
+	<string name="Verwijderen_message">Weet je zeker dat u deze gegevens wilt verwijderen?</string>
+	<string name="button_ja">Ja</string>
+	<string name="button_nee">Nee</string>
+					
 </resources>

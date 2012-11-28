@@ -99,14 +99,14 @@ public class WalkWithYouOnderzoek extends Activity {
 					if(gpsLocationListener != null && gpsLocationListener.getCurrentLocation() != null) {
 						AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
-						alert.setTitle("Herkennings punt toevoegen");
-						alert.setMessage("We zouden graag willen weten waarom u dit punt nou toevoegt als herkenningspunt, dit kunt u overslaan.");
+						alert.setTitle(R.string.Herkenningspunt_naam_title);
+						alert.setMessage(R.string.Herkenningspunt_naam_message);
 
 						// Set an EditText view to get user input 
 						final EditText input = new EditText(context);
 						alert.setView(input);
 
-						alert.setPositiveButton("Oke!", new DialogInterface.OnClickListener() {
+						alert.setPositiveButton(R.string.button_oke, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int whichButton) {
 								String value = input.getText().toString();
 								HerkenningPunt herkenningsPunt = new HerkenningPunt(gpsLocationListener.getCurrentLocation(), value);
@@ -114,7 +114,7 @@ public class WalkWithYouOnderzoek extends Activity {
 							}
 						});
 
-						alert.setNegativeButton("Overslaan!", new DialogInterface.OnClickListener() {
+						alert.setNegativeButton(R.string.button_overslaan, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int whichButton) {
 								HerkenningPunt herkenningsPunt = new HerkenningPunt(gpsLocationListener.getCurrentLocation(), "Gebruiker drukte op overslaan!");
 								onderzoekDatabase.addHerkenningPunt(herkenningsPunt);
@@ -147,16 +147,20 @@ public class WalkWithYouOnderzoek extends Activity {
 	private void openChangeEmailDialog() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
-		alert.setTitle("Email voor Export");
-		alert.setMessage("De gegevens die worden verzameld worden opgestuurt naar een email, uw kunt het hier invullen of later s" +
-				"nog veranderen in het menu");
-
+		alert.setTitle(R.string.Email_text_title);
+		alert.setMessage(R.string.Email_text_message);
+		
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		String email = settings.getString("email", null);
+		
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(context);
 		input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 		alert.setView(input);
-
-		alert.setPositiveButton("Oke!", new DialogInterface.OnClickListener() {
+		
+		input.setText(email);
+		
+		alert.setPositiveButton(R.string.button_oke, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String value = input.getText().toString();
 				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -199,15 +203,15 @@ public class WalkWithYouOnderzoek extends Activity {
 		case R.id.verwijderGegegevensMenuItem:
 			new AlertDialog.Builder(this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle("Verwijderen van Gegevens")
-			.setMessage("Waarom zou je je gevens willen verwijderen?")
-			.setPositiveButton("Doe toch maar!", new DialogInterface.OnClickListener() {
+			.setTitle(R.string.Verwijderen_title)
+			.setMessage(R.string.Verwijderen_message)
+			.setPositiveButton(R.string.button_ja, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialogInterface, int arg1) {
 					onderzoekDatabase.deleteCrumbs();
 					onderzoekDatabase.deleteHerkenningsPunten();
 				}
 			})
-			.setNegativeButton("Nee alsjeblieft niet doen..", null)
+			.setNegativeButton(R.string.button_nee, null)
 			.show();
 			return true;
 		case R.id.veranderEmail:

@@ -63,7 +63,7 @@ public class XMLExport {
 			stringBuilder.append(",");
 			stringBuilder.append(onderzoekDatabase.getBreadCrumb(index).getLatitudeE6() / 1e6);
 			stringBuilder.append("\r\n");
-		}
+		} 
 		coordinatesElement.setText(stringBuilder.toString());
 		return coordinatesElement;
 	}
